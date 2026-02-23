@@ -22,6 +22,7 @@ const form = reactive({
   enable_2fa: false,
 })
 const editing = ref(false)
+const drawerVisible = ref(false)
 
 async function fetchUsers() {
   loading.value = true
@@ -47,6 +48,15 @@ function resetForm() {
   editing.value = false
 }
 
+function openCreateDrawer() {
+  resetForm()
+  drawerVisible.value = true
+}
+
+function closeDrawer() {
+  drawerVisible.value = false
+}
+
 async function submitForm() {
   try {
     if (editing.value) {
@@ -65,6 +75,7 @@ async function submitForm() {
       })
     }
     resetForm()
+    closeDrawer()
     await fetchUsers()
   } catch (err) {
     errMsg.value = err?.response?.data?.message || '提交失败'
@@ -79,6 +90,7 @@ function fillEdit(u) {
   form.phone = u.phone
   form.password = ''
   form.enable_2fa = !!u.two_fa_enabled
+  drawerVisible.value = true
 }
 
 async function toggleStatus(u) {
@@ -123,20 +135,10 @@ onMounted(fetchUsers)
 
 <template>
   <section>
-    <h2>用户管理</h2>
-
-    <form class="card" @submit.prevent="submitForm" style="margin-bottom: 12px;">
-      <h3>{{ editing ? '编辑用户' : '新增用户' }}</h3>
-      <input v-model="form.username" required placeholder="用户名" />
-      <input v-model="form.email" required placeholder="邮箱" />
-      <input v-model="form.phone" required placeholder="手机号" />
-      <input v-if="!editing" v-model="form.password" required type="password" placeholder="密码" />
-      <label v-if="!editing"><input v-model="form.enable_2fa" type="checkbox" /> 启用 2FA</label>
-      <div style="display:flex; gap:8px;">
-        <button type="submit">{{ editing ? '保存修改' : '新增用户' }}</button>
-        <button v-if="editing" type="button" @click="resetForm">取消编辑</button>
-      </div>
-    </form>
+    <div class="header-row">
+      <h2>用户管理</h2>
+      <button class="btn-sm" @click="openCreateDrawer">新增用户</button>
+    </div>
 
     <div class="toolbar compact-toolbar">
       <input
@@ -190,6 +192,27 @@ onMounted(fetchUsers)
       <button @click="prevPage">上一页</button>
       <span>第 {{ query.page }} 页</span>
       <button @click="nextPage">下一页</button>
+    </div>
+
+    <div v-if="drawerVisible" class="drawer-mask" @click.self="closeDrawer">
+      <aside class="drawer">
+        <div class="drawer-header">
+          <h3>{{ editing ? '编辑用户' : '新增用户' }}</h3>
+          <button class="btn-sm" @click="closeDrawer">关闭</button>
+        </div>
+
+        <form class="drawer-form" @submit.prevent="submitForm">
+          <input v-model="form.username" required placeholder="用户名" />
+          <input v-model="form.email" required placeholder="邮箱" />
+          <input v-model="form.phone" required placeholder="手机号" />
+          <input v-if="!editing" v-model="form.password" required type="password" placeholder="密码" />
+          <label v-if="!editing"><input v-model="form.enable_2fa" type="checkbox" /> 启用 2FA</label>
+          <div style="display:flex; gap:8px;">
+            <button type="submit">{{ editing ? '保存修改' : '新增用户' }}</button>
+            <button type="button" @click="closeDrawer">取消</button>
+          </div>
+        </form>
+      </aside>
     </div>
   </section>
 </template>
