@@ -168,6 +168,25 @@ function formatHKTime(value) {
   return `${map.year}-${map.month}-${map.day} ${map.hour}:${map.minute}:${map.second}`
 }
 
+function maskPhone(phone) {
+  if (!phone) return '-'
+  const v = String(phone)
+  if (v.length < 7) return v
+  return `${v.slice(0, 3)}****${v.slice(-4)}`
+}
+
+function maskEmail(email) {
+  if (!email) return '-'
+  const v = String(email)
+  const idx = v.indexOf('@')
+  if (idx <= 0) return v
+
+  const name = v.slice(0, idx)
+  const domain = v.slice(idx)
+  if (name.length <= 2) return `${name[0] || ''}***${domain}`
+  return `${name.slice(0, 2)}***${domain}`
+}
+
 onMounted(fetchUsers)
 </script>
 
@@ -208,8 +227,8 @@ onMounted(fetchUsers)
         <tr v-for="u in list" :key="u.id">
           <td>{{ u.id }}</td>
           <td>{{ u.username }}</td>
-          <td>{{ u.email }}</td>
-          <td>{{ u.phone }}</td>
+          <td>{{ maskEmail(u.email) }}</td>
+          <td>{{ maskPhone(u.phone) }}</td>
           <td>
             <a v-if="u.two_fa_enabled" href="#" class="status-link" @click.prevent="show2FAQrcode(u)">开启</a>
             <span v-else class="muted">关闭</span>
