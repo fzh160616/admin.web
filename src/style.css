@@ -74,6 +74,19 @@ button:disabled { opacity: .6; cursor: not-allowed; }
 .muted { color: #6b7280; }
 a { color: #2563eb; text-decoration: none; }
 
+.toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.pager {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
