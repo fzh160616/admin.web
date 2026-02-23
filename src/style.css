@@ -54,6 +54,15 @@ body {
   justify-content: space-between;
   padding: 0 16px;
 }
+
+.logout-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 14px;
+}
+.logout-link:hover {
+  text-decoration: underline;
+}
 .content { padding: 20px; }
 
 input, button {

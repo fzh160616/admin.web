@@ -24,7 +24,7 @@ function logout() {
     <div class="main">
       <header class="topbar">
         <span>后台管理系统</span>
-        <button @click="logout">退出登录</button>
+        <a href="#" class="logout-link" @click.prevent="logout">退出登录</a>
       </header>
       <main class="content">
         <RouterView />
