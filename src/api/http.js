@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 const http = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8080',
+  // 默认走同源，避免本地部署时出现跨域预检(OPTIONS 405)
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/',
   timeout: 10000,
 })
 
