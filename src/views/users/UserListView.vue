@@ -193,11 +193,14 @@ onMounted(fetchUsers)
           <td>{{ u.email }}</td>
           <td>{{ u.phone }}</td>
           <td>{{ u.two_fa_enabled ? '开启' : '关闭' }}</td>
-          <td>{{ u.enabled ? '启用' : '禁用' }}</td>
+          <td>
+            <a href="#" class="status-link" @click.prevent="toggleStatus(u)">
+              {{ u.enabled ? '启用' : '禁用' }}
+            </a>
+          </td>
           <td>{{ formatHKTime(u.last_login_at) }}</td>
           <td style="display:flex; gap:6px;">
             <button @click="fillEdit(u)">编辑</button>
-            <button @click="toggleStatus(u)">{{ u.enabled ? '禁用' : '启用' }}</button>
             <button @click="removeUser(u)">删除</button>
           </td>
         </tr>

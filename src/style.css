@@ -63,6 +63,14 @@ body {
 .logout-link:hover {
   text-decoration: underline;
 }
+
+.status-link {
+  color: #2563eb;
+  text-decoration: none;
+}
+.status-link:hover {
+  text-decoration: underline;
+}
 .content { padding: 20px; }
 
 input, button {
