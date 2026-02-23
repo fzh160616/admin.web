@@ -130,6 +130,26 @@ function nextPage() {
   fetchUsers()
 }
 
+function formatHKTime(value) {
+  if (!value) return '-'
+  const d = new Date(value)
+  if (Number.isNaN(d.getTime())) return '-'
+
+  const s = new Intl.DateTimeFormat('zh-HK', {
+    timeZone: 'Asia/Hong_Kong',
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).formatToParts(d)
+
+  const map = Object.fromEntries(s.map((x) => [x.type, x.value]))
+  return `${map.year}-${map.month}-${map.day} ${map.hour}:${map.minute}:${map.second}`
+}
+
 onMounted(fetchUsers)
 </script>
 
@@ -174,7 +194,7 @@ onMounted(fetchUsers)
           <td>{{ u.phone }}</td>
           <td>{{ u.two_fa_enabled ? '开启' : '关闭' }}</td>
           <td>{{ u.enabled ? '启用' : '禁用' }}</td>
-          <td>{{ u.last_login_at || '-' }}</td>
+          <td>{{ formatHKTime(u.last_login_at) }}</td>
           <td style="display:flex; gap:6px;">
             <button @click="fillEdit(u)">编辑</button>
             <button @click="toggleStatus(u)">{{ u.enabled ? '禁用' : '启用' }}</button>
