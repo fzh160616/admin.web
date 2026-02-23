@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
-import { createUser, deleteUser, getUserList, updateUser, updateUserStatus } from '../../api/user'
+import { createUser, deleteUser, getUser2FAQrcode, getUserList, updateUser, updateUserStatus } from '../../api/user'
 
 const loading = ref(false)
 const errMsg = ref('')
@@ -23,6 +23,9 @@ const form = reactive({
 })
 const editing = ref(false)
 const drawerVisible = ref(false)
+const qrcodeVisible = ref(false)
+const qrcodeImg = ref('')
+const qrcodeTitle = ref('')
 
 async function fetchUsers() {
   loading.value = true
@@ -112,6 +115,21 @@ async function removeUser(u) {
   }
 }
 
+async function show2FAQrcode(u) {
+  if (!u.two_fa_enabled) {
+    errMsg.value = '该用户未开启 2FA'
+    return
+  }
+  try {
+    const { data } = await getUser2FAQrcode(u.id)
+    qrcodeImg.value = data?.data?.qrcode_data_url || ''
+    qrcodeTitle.value = `2FA 二维码 - ${u.username}`
+    qrcodeVisible.value = true
+  } catch (err) {
+    errMsg.value = err?.response?.data?.message || '获取 2FA 二维码失败'
+  }
+}
+
 function search() {
   query.page = 1
   fetchUsers()
@@ -192,7 +210,10 @@ onMounted(fetchUsers)
           <td>{{ u.username }}</td>
           <td>{{ u.email }}</td>
           <td>{{ u.phone }}</td>
-          <td>{{ u.two_fa_enabled ? '开启' : '关闭' }}</td>
+          <td>
+            <a v-if="u.two_fa_enabled" href="#" class="status-link" @click.prevent="show2FAQrcode(u)">开启</a>
+            <span v-else class="muted">关闭</span>
+          </td>
           <td>
             <a href="#" class="status-link" @click.prevent="toggleStatus(u)">
               {{ u.enabled ? '启用' : '禁用' }}
@@ -236,6 +257,16 @@ onMounted(fetchUsers)
           </div>
         </form>
       </aside>
+    </div>
+
+    <div v-if="qrcodeVisible" class="modal-mask" @click.self="qrcodeVisible = false">
+      <div class="modal-card">
+        <h3>{{ qrcodeTitle }}</h3>
+        <img v-if="qrcodeImg" :src="qrcodeImg" alt="2FA QRCode" class="qrcode-img" />
+        <div style="display:flex; justify-content:flex-end;">
+          <button class="btn-sm" @click="qrcodeVisible = false">关闭</button>
+        </div>
+      </div>
     </div>
   </section>
 </template>

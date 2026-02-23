@@ -8,6 +8,10 @@ export function createUser(data) {
   return http.post('/api/v1/users', data)
 }
 
+export function getUser2FAQrcode(id) {
+  return http.get(`/api/v1/users/${id}/2fa-qrcode`)
+}
+
 export function updateUser(id, data) {
   return http.put(`/api/v1/users/${id}`, data)
 }

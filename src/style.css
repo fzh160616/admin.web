@@ -160,6 +160,30 @@ a { color: #2563eb; text-decoration: none; }
   gap: 10px;
 }
 
+.modal-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: grid;
+  place-items: center;
+  z-index: 60;
+}
+
+.modal-card {
+  width: 320px;
+  max-width: 92vw;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.qrcode-img {
+  width: 220px;
+  height: 220px;
+  display: block;
+  margin: 12px auto;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
