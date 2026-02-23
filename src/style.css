@@ -80,6 +80,25 @@ a { color: #2563eb; text-decoration: none; }
   margin-bottom: 12px;
 }
 
+.compact-toolbar {
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.search-input {
+  max-width: 280px;
+  height: 34px;
+  font-size: 13px;
+}
+
+.btn-sm {
+  height: 34px;
+  min-width: 64px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+
 .pager {
   margin-top: 12px;
   display: flex;

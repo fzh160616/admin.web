@@ -138,9 +138,14 @@ onMounted(fetchUsers)
       </div>
     </form>
 
-    <div class="toolbar">
-      <input v-model="query.keyword" placeholder="搜索用户名/邮箱/手机号" @keyup.enter="search" />
-      <button @click="search">搜索</button>
+    <div class="toolbar compact-toolbar">
+      <input
+        v-model="query.keyword"
+        class="search-input"
+        placeholder="搜索用户名 / 邮箱 / 手机号"
+        @keyup.enter="search"
+      />
+      <button class="btn-sm" @click="search">搜索</button>
     </div>
 
     <p v-if="errMsg" class="err">{{ errMsg }}</p>
